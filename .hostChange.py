@@ -4,14 +4,10 @@ from os import close, read
 import subprocess
 from typing import final
 import shutil
-import socket
 import sys
 
 bashrc_path = "/home/creditfool/kodingan/Project/host swithcer/dummy_bash"
 bkp_path = bashrc_path+".bkp"
-
-host = socket.gethostbyname(socket.gethostname())
-print(host)
 
 
 def makeBackup(source: str, target: str):
@@ -28,10 +24,7 @@ def makeBackup(source: str, target: str):
         print("There is error when creating backup file")
 
 
-#makeBackup(bashrc_path, bkp_path)
-
-
-def changeHost(path, master='', hostname=''):
+def changeHost(path, master: str = '', hostname: str = ''):
 
     masterIP_default = "192.168.0.102"
     computerIP_default = "192.168.0.102"
@@ -71,6 +64,27 @@ def changeHost(path, master='', hostname=''):
         writer.close()
 
 
-changeHost(bashrc_path)
+#makeBackup(bashrc_path, bkp_path)
+args = sys.argv
+masterIP = ''
+hostnameIP = ''
+
+if len(args) == 1:
+    tes = "httplalal:11311"
+    print(tes.lstrip('http').rstrip(':11311'))
+    print("Happy Lucky Smile Yay")
+
+elif len(args) == 2:
+    masterIP, hostnameIP = str(args[1])
+
+elif len(args) >= 3:
+    masterIP = str(args[1])
+    hostnameIP = str(args[2])
+
+print("ROS IP Configuration will be change to:")
+print("Master: http://"+masterIP+":11311")
+print("HOST: "+masterIP)
+choice = input("continue y/n: ")
+# changeHost(bashrc_path)
 # subprocess.run(["clear"])
 # subprocess.run(["bash"])
