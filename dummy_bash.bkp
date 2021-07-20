@@ -119,8 +119,8 @@ fi
 #---------------------------------------------------
 # Metode lawas, silahkan pakai jika ada kendala
 #
-#export ROS_MASTER_URI=http://192.168.0.102:11311
-#export ROS_HOSTNAME=192.168.0.102
+#export ROS_MASTER_URI=http://192.168.0.102:11311 #Ganti dengan IP Komputer master
+#export ROS_HOSTNAME=192.168.0.102                #Ganti dengan IP Komputer saat ini
 #
 #export ROS_MASTER_URI=http://localhost:11311
 #export ROS_HOSTNAME=localhost
