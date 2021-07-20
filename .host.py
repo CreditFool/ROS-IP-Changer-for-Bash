@@ -32,17 +32,18 @@ def makeBackup(source: str, target: str):
 makeBackup(bashrc_path, bkp_path)
 
 
-def changeHost(master='', hostname=''):
+def changeHost(path, master, hostname=''):
     try:
-        with open(bashrc_path, 'r') as reader, open("outdummy", "w") as writer:
+        with open(path, 'r') as reader, open("outdummy", "w") as writer:
             new_content = ''
             for line in reader:
                 line_strip = line.strip()
                 if "export ROS_MASTER_URI" in line and line[0] != '#':
-                    line_strip = "export ROS_MASTER_URI=http://"+local+":11311"
+                    line_strip = "export ROS_MASTER_URI=http://"+master+":11311"
 
                 if "export ROS_HOSTNAME" in line and line[0] != '#':
-                    line_strip = "export ROS_HOSTNAME="+local
+                    line_strip = "export ROS_HOSTNAME=" + \
+                        (hostname if (hostname != '') else master)
 
                 new_content += line_strip+"\n"
 
@@ -52,5 +53,7 @@ def changeHost(master='', hostname=''):
         reader.close()
         writer.close()
 
+
+changeHost(bashrc_path, "192.1.0.0", "192.1.1.1")
 # subprocess.run(["clear"])
 # subprocess.run(["bash"])
