@@ -24,6 +24,10 @@ def makeBackup(source: str, target: str):
         print("There is error when creating backup file")
 
 
+def readBashrc(path):
+    print("hello happy world!")
+
+
 def changeHost(path, master: str = '', hostname: str = ''):
 
     masterIP_default = "192.168.0.102"
