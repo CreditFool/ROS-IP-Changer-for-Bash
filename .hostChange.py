@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from os import close, read
+from os import close, read, write
 import subprocess
 from typing import final
 import shutil
@@ -57,54 +57,41 @@ def readBashrc(path):
     return new_content, masterIP, hostIP
 
 
-def changeHost(path, master: str = '', hostname: str = ''):
+def changeHost(path, content, master: str = '', hostname: str = ''):
 
     MASTER_IP_DEFAULT = "192.168.0.102"
     COMPUTER_IP_DEFAULT = "192.168.0.102"
 
-    new_content, masterIP, computerIP = readBashrc(bashrc_path)
-    try:
-        with open(path, 'r') as reader:
-            for line in reader:
-                line_strip = line.strip()
-                if "export ROS_MASTER_URI" in line and line[0] != '#':
-                    if master == '':
-                        line_strip = "export ROS_MASTER_URI=http://" + \
-                            (MASTER_IP_DEFAULT if "localhost" in line_strip else "localhost")+":11311"
-
-                    else:
-                        line_strip = "export ROS_MASTER_URI=http://"+master+":11311"
-
-                if "export ROS_HOSTNAME" in line and line[0] != '#':
-                    if master == '':
-                        line_strip = "export ROS_HOSTNAME=" + \
-                            (COMPUTER_IP_DEFAULT if "localhost" in line_strip else "localhost")
-
-                    else:
-                        line_strip = "export ROS_HOSTNAME=" + \
-                            (hostname if (hostname != '') else master)
-
-                new_content.append(line_strip+"\n")
-
-    finally:
-        reader.close()
-
     try:
         with open(path, "w") as writer:
-            for line in new_content:
+            for line in content:
                 if "export ROS_MASTER_URI" in line and line[0] != '#':
                     if master == '':
                         line = writeMasterURI(
-                            (MASTER_IP_DEFAULT if "localhost" in line_strip else "localhost"))
-
+                            (MASTER_IP_DEFAULT if "localhost" in line else "localhost"))
                     else:
                         line = writeMasterURI(master)
+
+                if "export ROS_HOSTNAME" in line and line[0] != '#':
+                    if master == '':
+                        line = writeHostname(
+                            (COMPUTER_IP_DEFAULT if "localhost" in line else "localhost"))
+                    else:
+                        line = writeHostname(
+                            (hostname if (hostname != '') else master))
 
                 writer.write(line+"\n")
 
     finally:
         writer.close()
 
+
+def main(args):
+    print("Hello, Happy World")
+
+
+konten, master, host = readBashrc(bashrc_path)
+changeHost(bashrc_path, konten)
 
 #makeBackup(bashrc_path, bkp_path)
 # args = sys.argv
