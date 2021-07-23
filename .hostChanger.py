@@ -104,8 +104,7 @@ def main(args):
         )
 
     elif len(args) == 2:
-        new_master = str(args[1])
-        new_host = str(args[1])
+        new_master = new_host = str(args[1])
 
     elif len(args) >= 3:
         new_master = str(args[1])
