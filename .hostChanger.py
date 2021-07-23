@@ -5,7 +5,6 @@ import subprocess
 from typing import final
 import shutil
 import sys
-import re
 
 
 def makeBackup(source: str, target: str):
@@ -30,7 +29,7 @@ def writeHostname(address: str):
     return f"export ROS_HOSTNAME={address}"
 
 
-def readBashrc(path):
+def readBashrc(path: str):
     masterIP = ''
     hostIP = ''
 
@@ -54,7 +53,7 @@ def readBashrc(path):
     return new_content, masterIP, hostIP
 
 
-def changeHost(path, content, master: str = '', hostname: str = ''):
+def changeHost(path: str, content, master: str = '', hostname: str = ''):
 
     MASTER_IP_DEFAULT = "192.168.0.102"
     COMPUTER_IP_DEFAULT = "192.168.0.102"
@@ -98,21 +97,21 @@ def main(args):
     new_host = ''
     if len(args) == 1:
         new_master = (
-            COMPUTER_IP_DEFAULT if current_master == "localhost" else "localhost"
+            MASTER_IP_DEFAULT if current_master == "localhost" else "localhost"
         )
         new_host = (
             COMPUTER_IP_DEFAULT if "localhost" in current_host else "localhost"
         )
 
     elif len(args) == 2:
-        new_master, new_host = str(args[1])
+        new_master = str(args[1])
+        new_host = str(args[1])
 
     elif len(args) >= 3:
         new_master = str(args[1])
         new_host = str(args[2])
 
-    print()
-    print("ROS IP Configuration will be change to:")
+    print("\nROS IP Configuration will be change to:")
     print(
         f"Master: http://{current_master}:11311   =>   http://{new_master}:11311"
     )
