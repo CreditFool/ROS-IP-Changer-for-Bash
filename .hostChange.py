@@ -7,9 +7,6 @@ import shutil
 import sys
 import re
 
-bashrc_path = "/home/creditfool/kodingan/Project/host swithcer/dummy_bash"
-bkp_path = bashrc_path+".bkp"
-
 
 def makeBackup(source: str, target: str):
     try:
@@ -68,17 +65,20 @@ def changeHost(path, content, master: str = '', hostname: str = ''):
                 if "export ROS_MASTER_URI" in line and line[0] != '#':
                     if master == '':
                         line = writeMasterURI(
-                            (MASTER_IP_DEFAULT if "localhost" in line else "localhost"))
+                            (MASTER_IP_DEFAULT if "localhost" in line else "localhost")
+                        )
                     else:
                         line = writeMasterURI(master)
 
                 if "export ROS_HOSTNAME" in line and line[0] != '#':
                     if master == '':
                         line = writeHostname(
-                            (COMPUTER_IP_DEFAULT if "localhost" in line else "localhost"))
+                            (COMPUTER_IP_DEFAULT if "localhost" in line else "localhost")
+                        )
                     else:
                         line = writeHostname(
-                            (hostname if (hostname != '') else master))
+                            (hostname if (hostname != '') else master)
+                        )
 
                 writer.write(line+"\n")
 
@@ -87,34 +87,44 @@ def changeHost(path, content, master: str = '', hostname: str = ''):
 
 
 def main(args):
-    print("Hello, Happy World")
+    BASHRC_PATH = "/home/creditfool/kodingan/Project/host swithcer/dummy_bash"
+    BACKUP_PATH = BASHRC_PATH + ".backup"
+
+    MASTER_IP_DEFAULT = "192.168.0.102"
+    COMPUTER_IP_DEFAULT = "192.168.0.102"
+
+    basrc_content, current_master, current_host = readBashrc(BASHRC_PATH)
+    new_master = ''
+    new_host = ''
+    if len(args) == 1:
+        new_master = (
+            COMPUTER_IP_DEFAULT if current_master == "localhost" else "localhost"
+        )
+        new_host = (
+            COMPUTER_IP_DEFAULT if "localhost" in current_host else "localhost"
+        )
+
+    elif len(args) == 2:
+        new_master, new_host = str(args[1])
+
+    elif len(args) >= 3:
+        new_master = str(args[1])
+        new_host = str(args[2])
+
+    print()
+    print("ROS IP Configuration will be change to:")
+    print(
+        "Master: http://"+current_master + ":11311   =>   http://"+new_master+":11311"
+    )
+    print("HOST  : "+current_host + "                =>   "+new_host)
+
+    choice = input("\ncontinue y/n (default n): ")
+    if choice == 'y':
+        changeHost(BASHRC_PATH, basrc_content, new_master, new_host)
+        subprocess.run(["clear"])
+        subprocess.run(["bash"])
+    else:
+        print("Program Aborted")
 
 
-konten, master, host = readBashrc(bashrc_path)
-changeHost(bashrc_path, konten)
-
-#makeBackup(bashrc_path, bkp_path)
-# args = sys.argv
-# masterIP = ''
-# hostnameIP = ''
-
-# if len(args) == 1:
-#     tes = "httplalal:11311"
-#     print(tes.lstrip('http').rstrip(':11311'))
-#     print("Happy Lucky Smile Yay")
-
-# elif len(args) == 2:
-#     masterIP, hostnameIP = str(args[1])
-
-# elif len(args) >= 3:
-#     masterIP = str(args[1])
-#     hostnameIP = str(args[2])
-
-# print("ROS IP Configuration will be change to:")
-# print("Master: http://"+masterIP+":11311")
-# print("HOST: "+masterIP)
-# choice = input("continue y/n: ")
-
-# changeHost(bashrc_path)
-# subprocess.run(["clear"])
-# subprocess.run(["bash"])
+main(sys.argv)
