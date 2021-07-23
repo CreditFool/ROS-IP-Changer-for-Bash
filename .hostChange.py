@@ -23,11 +23,11 @@ def makeBackup(source: str, target: str):
 
 
 def writeMasterURI(address: str):
-    return "export ROS_MASTER_URI=http://" + address + ":11311"
+    return f"export ROS_MASTER_URI=http://{address}:11311"
 
 
 def writeHostname(address: str):
-    return "export ROS_HOSTNAME=" + address
+    return f"export ROS_HOSTNAME={address}"
 
 
 def readBashrc(path):
@@ -114,9 +114,9 @@ def main(args):
     print()
     print("ROS IP Configuration will be change to:")
     print(
-        "Master: http://"+current_master + ":11311   =>   http://"+new_master+":11311"
+        f"Master: http://{current_master}:11311   =>   http://{new_master}:11311"
     )
-    print("HOST  : "+current_host + "                =>   "+new_host)
+    print(f"HOST  : {current_host}                =>   {new_host}")
 
     choice = input("\ncontinue y/n (default n): ")
     if choice == 'y':
